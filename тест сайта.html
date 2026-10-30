@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Хэллоуинский Квест</title>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            background-color: #000000;
+            font-family: 'Georgia', serif;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        .white-bar {
+            background-color: #ffffff;
+            color: #000000;
+            text-align: center;
+            padding: 15px 0;
+            font-size: 1.5rem;
+            font-weight: bold;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+        }
+
+        .content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 20px;
+            box-sizing: border-box;
+            text-align: center;
+        }
+
+        .quote {
+            color: #ffffff;
+            font-size: 1.35rem;
+            line-height: 1.8;
+            max-width: 750px;
+            margin-bottom: 40px;
+            text-shadow: 0 0 8px rgba(255, 255, 255, 0.4);
+        }
+
+        .input-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            font-size: 1.1rem;
+            border: 2px solid #ff6600;
+            border-radius: 5px;
+            background-color: #111111;
+            color: #ffffff;
+            outline: none;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+        }
+
+        input[type="text"]:focus {
+            box-shadow: 0 0 10px #ff6600;
+        }
+
+        button {
+            padding: 12px 30px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            background-color: #ff6600;
+            color: #000000;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+        }
+
+        button:hover {
+            background-color: #e65c00;
+            box-shadow: 0 0 15px rgba(255, 102, 0, 0.6);
+        }
+
+        .result-message {
+            margin-top: 25px;
+            font-size: 1.25rem;
+            min-height: 40px;
+            transition: color 0.3s ease;
+        }
+
+        .wrong {
+            color: #ff3333;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            animation: shake 0.3s ease-in-out;
+        }
+
+        .correct {
+            color: #00ffcc;
+            font-style: italic;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="white-bar">Следующее место</div>
+
+    <div class="content">
+        <div class="quote">
+            «Я не боюсь занять твёрдую позицию, подойдите, возьмите меня за руку и мы вместе пойдём по этой дороге, сквозь ураган, в любую погоду, в холод или жару, просто знайте, вы не одни. Зовите, если почувствуете, что идёте по той же дороге!»
+        </div>
+
+        <div class="input-container">
+            <input type="text" id="passwordInput" placeholder="Введите пароль...">
+            <button onclick="checkPassword()">Проверить</button>
+            <div id="result" class="result-message"></div>
+        </div>
+    </div>
+
+    <div class="white-bar">Следующее место</div>
+
+    <script>
+        // Челики с F12 - сосните хуйца))), люблю вас умнички, вы хитрюшки
+        const encryptedDataStr = "1113,1107,1108,1071,1063,1069,1149,1111,1105,78,1060,1111,1029,1062,1115,1118,1067,1071,101,1071,1113,1111,1112,1062";
+        const encryptedSecret = encryptedDataStr.split(',').map(Number);
+
+        function checkPassword() {
+            const input = document.getElementById('passwordInput').value.trim();
+            const resultDiv = document.getElementById('result');
+            resultDiv.className = 'result-message';
+
+            if (!input) {
+                resultDiv.textContent = 'Бугагагага';
+                resultDiv.classList.add('wrong');
+                return;
+            }
+
+            let decryptedText = "";
+            
+            // Расшифровка текста с использованием введенного ключа
+            for (let i = 0; i < encryptedSecret.length; i++) {
+                const charCode = encryptedSecret[i] ^ input.charCodeAt(i % input.length);
+                decryptedText += String.fromCharCode(charCode);
+            }
+
+            // Проверяем корректность расшифровки
+            if (decryptedText.startsWith("Монс")) {
+                resultDiv.textContent = decryptedText;
+                resultDiv.classList.add('correct');
+            } else {
+                resultDiv.textContent = 'Бугагагага';
+                resultDiv.classList.add('wrong');
+            }
+        }
+
+        document.getElementById('passwordInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                checkPassword();
+            }
+        });
+    </script>
+
+</body>
+</html>
